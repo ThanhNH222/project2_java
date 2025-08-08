@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Search Results</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2>Kết quả tìm kiếm cho: "<span th:text="${keyword}"></span>"</h2>
+  <hr>
+
+  <div class="row" th:if="${cars.size() > 0}">
+    <div class="col-md-4 mb-4" th:each="car : ${cars}">
+      <div class="card">
+        <img th:src="${car.imageUrl}" class="card-img-top" alt="Car Image">
+        <div class="card-body">
+          <h5 class="card-title" th:text="${car.name}"></h5>
+          <p class="card-text">
+            <b>Giá/ngày:</b> <span th:text="${car.pricePerDay}"></span> <br>
+            <b>Loại:</b> <span th:text="${car.carType.name}"></span> <br>
+            <b>Hãng:</b> <span th:text="${car.brand.name}"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:if="${cars.size() == 0}">
+    <p>Không tìm thấy xe nào phù hợp.</p>
+  </div>
+</div>
+
+</body>
+</html>
