@@ -1,0 +1,121 @@
+[
+  {
+    "id": 1,
+    "name": "Toyota Fortuner",
+    "type": "SUV",
+    "brand": "Toyota",
+    "licensePlate": "51A-12345",
+    "seatNumber": 7,
+    "pricePerDay": 80.00,
+    "hasDriver": false,
+    "status": "available",
+    "description": "SUV mạnh mẽ",
+    "images": [
+      "img/cars/fortuner1.jpg",
+      "img/cars/fortuner2.jpg",
+      "img/cars/fortuner3.jpg"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Toyota Fortuner",
+    "type": "SUV",
+    "brand": "Toyota",
+    "licensePlate": "51A-12345",
+    "seatNumber": 7,
+    "pricePerDay": 80.00,
+    "hasDriver": false,
+    "status": "available",
+    "description": "SUV mạnh mẽ",
+    "images": [
+      "img/cars/fortuner1.jpg",
+      "img/cars/fortuner2.jpg",
+      "img/cars/fortuner3.jpg"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Toyota Fortuner",
+    "type": "SUV",
+    "brand": "Toyota",
+    "licensePlate": "51A-12345",
+    "seatNumber": 7,
+    "pricePerDay": 80.00,
+    "hasDriver": false,
+    "status": "available",
+    "description": "SUV mạnh mẽ",
+    "images": [
+      "img/cars/fortuner1.jpg",
+      "img/cars/fortuner2.jpg",
+      "img/cars/fortuner3.jpg"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Toyota Fortuner",
+    "type": "SUV",
+    "brand": "Toyota",
+    "licensePlate": "51A-12345",
+    "seatNumber": 7,
+    "pricePerDay": 80.00,
+    "hasDriver": false,
+    "status": "available",
+    "description": "SUV mạnh mẽ",
+    "images": [
+      "img/cars/fortuner1.jpg",
+      "img/cars/fortuner2.jpg",
+      "img/cars/fortuner3.jpg"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Toyota Fortuner",
+    "type": "SUV",
+    "brand": "Toyota",
+    "licensePlate": "51A-12345",
+    "seatNumber": 7,
+    "pricePerDay": 80.00,
+    "hasDriver": false,
+    "status": "available",
+    "description": "SUV mạnh mẽ",
+    "images": [
+      "img/cars/fortuner1.jpg",
+      "img/cars/fortuner2.jpg",
+      "img/cars/fortuner3.jpg"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Toyota Fortuner",
+    "type": "SUV",
+    "brand": "Toyota",
+    "licensePlate": "51A-12345",
+    "seatNumber": 7,
+    "pricePerDay": 80.00,
+    "hasDriver": false,
+    "status": "available",
+    "description": "SUV mạnh mẽ",
+    "images": [
+      "img/cars/fortuner1.jpg",
+      "img/cars/fortuner2.jpg",
+      "img/cars/fortuner3.jpg"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Toyota Fortuner",
+    "type": "SUV",
+    "brand": "Toyota",
+    "licensePlate": "51A-12345",
+    "seatNumber": 7,
+    "pricePerDay": 80.00,
+    "hasDriver": false,
+    "status": "available",
+    "description": "SUV mạnh mẽ",
+    "images": [
+      "img/cars/fortuner1.jpg",
+      "img/cars/fortuner2.jpg",
+      "img/cars/fortuner3.jpg"
+    ]
+  }
+]
