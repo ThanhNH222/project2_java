@@ -36,7 +36,7 @@
     </style>
 </head>
 <body>
-
+<nav th:replace="fragments/nav :: nav"></nav>
 <div class="container py-5">
     <div class="row g-5">
         <!-- Ảnh xe -->
@@ -104,28 +104,6 @@
                     </div>
                 </form>
             </div>
-
-            <!-- Bảng giá đầy đủ -->
-            <div class="mt-4">
-                <h5>Bảng giá thuê</h5>
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Loại thuê</th>
-                        <th>Có tài xế</th>
-                        <th>Giá</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="rate : ${car.rentalRates}">
-                        <td th:text="${rate.rateType}"></td>
-                        <td th:text="${rate.hasDriver ? 'Có' : 'Không'}"></td>
-                        <td th:text="${#numbers.formatDecimal(rate.price, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
         </div>
     </div>
 </div>
