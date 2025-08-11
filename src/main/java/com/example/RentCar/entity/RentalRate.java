@@ -23,7 +23,7 @@ public class RentalRate {
     Car car;
 
     public enum RateType{
-        hour, day, month
+        hour, day, year
     }
 
     public Long getId() {

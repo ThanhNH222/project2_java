@@ -1,95 +1,48 @@
 [
   {
     "id": 1,
-    "name": "Toyota Vios",
+    "name": "TOYOTA VELOZ CROSS 2022",
     "licensePlate": "29A-12345",
     "seatNumber": 5,
     "pricePerDay": 500000,
     "hasDriver": false,
     "status": "available",
     "description": "Xe sedan 5 chỗ, máy êm, tiết kiệm nhiên liệu",
-    "imageUrl": "static/img/vios.jpg",
-    "carType": {
-      "id": 1,
-      "name": "Sedan"
-    },
-    "brand": {
-      "id": 1,
-      "name": "Toyota"
-    },
+    "imageUrl": "/img/TOYOTA VELOZ CROSS 2022 1.jpg",
+    "carType": { "id": 1, "name": "Sedan" },
+    "brand": { "id": 1, "name": "Toyota" },
     "rentalRates": [
-      { "id": 1, "rateType": "day", "hasDriver": false, "price": 500000 },
-      { "id": 2, "rateType": "day", "hasDriver": true, "price": 700000 }
+      { "id": 1, "rateType": "hour", "hasDriver": false, "price": 100000 },
+      { "id": 2, "rateType": "day", "hasDriver": false, "price": 500000 },
+      { "id": 3, "rateType": "year", "hasDriver": false, "price": 120000000 }
     ],
-    "carDeposit": {
-      "id": 1,
-      "depositAmount": 2000000
-    },
+    "carDeposit": { "id": 1, "depositAmount": 2000000 },
     "images": [
-      { "id": 1, "url": "static/img/vios1.jpg" },
-      { "id": 2, "url": "static/img/vios2.jpg" }
+      { "id": 1, "url": "/img/TOYOTA VELOZ CROSS 2022 1.1.jpg" },
+      { "id": 2, "url": "/img/TOYOTA VELOZ CROSS 2022 1.2.jpg" }
     ]
   },
   {
     "id": 2,
-    "name": "Hyundai SantaFe",
+    "name": "HYUNDAI ACCENT 2019",
     "licensePlate": "30A-67890",
     "seatNumber": 7,
     "pricePerDay": 1200000,
     "hasDriver": true,
     "status": "available",
     "description": "SUV 7 chỗ, rộng rãi, mạnh mẽ",
-    "imageUrl": "static/img/santafe.jpg",
-    "carType": {
-      "id": 2,
-      "name": "SUV"
-    },
-    "brand": {
-      "id": 2,
-      "name": "Hyundai"
-    },
+    "imageUrl": "/img/HYUNDAI ACCENT 2019 2.1.jpg",
+    "carType": { "id": 2, "name": "SUV" },
+    "brand": { "id": 2, "name": "Hyundai" },
     "rentalRates": [
-      { "id": 3, "rateType": "day", "hasDriver": false, "price": 1200000 },
-      { "id": 4, "rateType": "day", "hasDriver": true, "price": 1500000 }
+      { "id": 4, "rateType": "hour", "hasDriver": false, "price": 200000 },
+      { "id": 5, "rateType": "day", "hasDriver": false, "price": 1200000 },
+      { "id": 6, "rateType": "year", "hasDriver": false, "price": 250000000 }
     ],
-    "carDeposit": {
-      "id": 2,
-      "depositAmount": 3000000
-    },
+    "carDeposit": { "id": 2, "depositAmount": 3000000 },
     "images": [
-      { "id": 3, "url": "static/img/santafe1.jpg" },
-      { "id": 4, "url": "static/img/santafe2.jpg" }
-    ]
-  },
-  {
-    "id": 3,
-    "name": "Mercedes C200",
-    "licensePlate": "51H-45678",
-    "seatNumber": 5,
-    "pricePerDay": 2500000,
-    "hasDriver": false,
-    "status": "maintenance",
-    "description": "Xe sang, tiện nghi cao cấp",
-    "imageUrl": "static/img/mercedes.jpg",
-    "carType": {
-      "id": 1,
-      "name": "Sedan"
-    },
-    "brand": {
-      "id": 3,
-      "name": "Mercedes-Benz"
-    },
-    "rentalRates": [
-      { "id": 5, "rateType": "day", "hasDriver": false, "price": 2500000 },
-      { "id": 6, "rateType": "day", "hasDriver": true, "price": 3000000 }
-    ],
-    "carDeposit": {
-      "id": 3,
-      "depositAmount": 5000000
-    },
-    "images": [
-      { "id": 5, "url": "static/img/mercedes1.jpg" },
-      { "id": 6, "url": "static/img/mercedes2.jpg" }
+      { "id": 3, "url": "/img/HYUNDAI ACCENT 2019 2.1.jpg" },
+      { "id": 4, "url": "/img/HYUNDAI ACCENT 2019 2.2.jpg" }
     ]
   }
 ]

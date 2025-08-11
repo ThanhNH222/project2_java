@@ -35,14 +35,12 @@ public class CarController {
     }
 
 
-    private CarRepository carRepository;
-
     @GetMapping("/search")
     public String searchCars(@RequestParam("keyword") String keyword, Model model) {
-        List<Car> cars = carRepository.searchCars(keyword);
+        List<Car> cars = carService.searchCars(keyword);
         model.addAttribute("cars", cars);
         model.addAttribute("keyword", keyword);
-        return "car/search-results";
+        return "/car/search"; // file search.html
     }
 
 

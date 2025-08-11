@@ -28,4 +28,19 @@ public class CarService {
                 .findFirst()
                 .orElse(null);
     }
+
+    public List<Car> searchCars(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllCars();
+        }
+        String lowerKeyword = keyword.toLowerCase();
+
+        return getAllCars().stream()
+                .filter(car ->
+                        car.getName().toLowerCase().contains(lowerKeyword) ||
+                                (car.getCarType() != null && car.getCarType().getName().toLowerCase().contains(lowerKeyword)) ||
+                                (car.getBrand() != null && car.getBrand().getName().toLowerCase().contains(lowerKeyword))
+                )
+                .toList();
+    }
 }
