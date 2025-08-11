@@ -33,14 +33,29 @@
             transform: scale(1.1);
             border: 2px solid #007bff;
         }
+        .booking-form {
+            background: #6c757d;
+            padding: 25px;
+            border-radius: 8px;
+            color: white;
+        }
+        .booking-form h4 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .input-group span {
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
 <nav th:replace="fragments/nav :: nav"></nav>
+
 <div class="container py-5">
     <div class="row g-5">
-        <!-- Ảnh xe -->
-        <div class="col-lg-6">
+
+        <!-- Cột 1: Ảnh xe -->
+        <div class="col-lg-4">
             <div class="border rounded">
                 <img id="mainImage" th:src="${car.imageUrl}" class="img-fluid rounded" alt="Car Image">
             </div>
@@ -53,19 +68,16 @@
             </div>
         </div>
 
-        <!-- Thông tin xe + Form đặt -->
-        <div class="col-lg-6">
+        <!-- Cột 2: Thông tin xe -->
+        <div class="col-lg-4">
             <h2 class="mb-3" th:text="${car.name}">Tên xe</h2>
-
-            <!-- Giá thay đổi -->
             <h4 class="text-primary mb-2">
                 <span id="rentalPrice"
                       th:text="${#numbers.formatDecimal(car.rentalRates[0].price, 0, 'COMMA', 0, 'POINT')}"></span> VND
             </h4>
 
-            <!-- Chọn hình thức thuê -->
             <div class="mb-4">
-                <select class="form-select w-50" id="rentalType" onchange="updatePrice()">
+                <select class="form-select w-75" id="rentalType" onchange="updatePrice()">
                     <option th:each="rate : ${car.rentalRates}"
                             th:value="${rate.rateType}"
                             th:data-price="${rate.price}"
@@ -84,27 +96,92 @@
                 <li><strong>Tài xế:</strong> <span th:text="${car.hasDriver ? 'Có tài xế' : 'Tự lái'}"></span></li>
                 <li><strong>Trạng thái:</strong> <span th:text="${car.status}"></span></li>
             </ul>
+        </div>
 
-            <!-- Form đặt xe -->
-            <div class="bg-secondary rounded p-4">
-                <h4 class="text-white mb-3">ĐẶT XE NGAY</h4>
-                <form>
+        <!-- Cột 3: Form đặt xe -->
+        <div class="col-lg-4">
+            <div class="booking-form">
+                <h4>ĐẶT XE NGAY</h4>
+                <form th:action="@{/booking}" method="post">
                     <div class="row g-3">
+                        <!-- Chọn loại xe -->
                         <div class="col-12">
-                            <label class="text-white mb-1">Ngày nhận xe</label>
-                            <input class="form-control" type="date">
+                            <select class="form-select" name="carId" required>
+                                <option value="">Chọn loại xe</option>
+                                <option th:each="c : ${cars}"
+                                        th:value="${c.id}"
+                                        th:text="${c.name}">
+                                </option>
+                            </select>
                         </div>
+
+                        <!-- Nơi nhận -->
                         <div class="col-12">
-                            <label class="text-white mb-1">Ngày trả xe</label>
-                            <input class="form-control" type="date">
+                            <div class="input-group">
+                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                    <span class="fas fa-map-marker-alt"></span>
+                                    <span class="ms-1">Nơi nhận</span>
+                                </div>
+                                <input class="form-control" type="text" name="pickupLocation" placeholder="Nhập thành phố hoặc sân bay" required>
+                            </div>
                         </div>
+
+                        <!-- Nơi trả -->
                         <div class="col-12">
-                            <button type="submit" class="btn btn-light w-100 py-2">Xác nhận đặt xe</button>
+                            <div class="input-group">
+                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                    <span class="fas fa-map-marker-alt"></span>
+                                    <span class="ms-1">Nơi trả</span>
+                                </div>
+                                <input class="form-control" type="text" name="dropoffLocation" placeholder="Nhập thành phố hoặc sân bay" required>
+                            </div>
+                        </div>
+
+                        <!-- Ngày & giờ nhận -->
+                        <div class="col-12">
+                            <div class="input-group">
+                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                    <span class="fas fa-calendar-alt"></span>
+                                    <span class="ms-1">Ngày nhận</span>
+                                </div>
+                                <input class="form-control" type="date" name="pickupDate" required>
+                                <select class="form-select ms-3" name="pickupTime" required>
+                                    <option value="">Chọn giờ</option>
+                                    <option th:each="h : ${#numbers.sequence(0,23)}"
+                                            th:value="${h + ':00'}"
+                                            th:text="${h + ':00'}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Ngày & giờ trả -->
+                        <div class="col-12">
+                            <div class="input-group">
+                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                    <span class="fas fa-calendar-alt"></span>
+                                    <span class="ms-1">Ngày trả</span>
+                                </div>
+                                <input class="form-control" type="date" name="dropoffDate" required>
+                                <select class="form-select ms-3" name="dropoffTime" required>
+                                    <option value="">Chọn giờ</option>
+                                    <option th:each="h : ${#numbers.sequence(0,23)}"
+                                            th:value="${h + ':00'}"
+                                            th:text="${h + ':00'}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Nút đặt -->
+                        <div class="col-12">
+                            <button class="btn btn-light w-100 py-2" type="submit">Đặt ngay</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+
     </div>
 </div>
 
