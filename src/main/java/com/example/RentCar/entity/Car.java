@@ -48,8 +48,29 @@ public class Car {
     @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     CarDeposit carDeposit;
 
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CarImage> images = new ArrayList<>();
+
+    public List<CarImage> getImages() {
+        return images;
+    }
+    public void setImages(List<CarImage> images) {
+        this.images = images;
+    }
+
+
     public Long getId() {
         return id;
+    }
+    @Column(name = "type")
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setId(Long id) {

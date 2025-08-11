@@ -26,5 +26,43 @@ public class RentalRate {
         hour, day, month
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public RateType getRateType() {
+        return rateType;
+    }
+
+    public void setRateType(RateType rateType) {
+        this.rateType = rateType;
+    }
+
+    public Boolean getHasDriver() {
+        return hasDriver;
+    }
+
+    public void setHasDriver(Boolean hasDriver) {
+        this.hasDriver = hasDriver;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
 }
