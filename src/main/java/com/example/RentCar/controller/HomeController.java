@@ -13,14 +13,19 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private CarService carService;
+
+
+    private final CarService carService;
+
+    public HomeController(CarService carService) {
+        this.carService = carService;
+    }
+
 
     // Trang chủ
     @GetMapping("/")
     public String home(Model model) {
-        List<Car> cars = carService.getAllCars(); // Lấy dữ liệu từ JSON
-        model.addAttribute("cars", cars);
+        model.addAttribute("cars", carService.getAllCars());
         model.addAttribute("content", "home");
         model.addAttribute("title", "Trang chủ");
         return "layout/main";

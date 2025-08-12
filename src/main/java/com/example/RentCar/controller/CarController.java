@@ -1,18 +1,13 @@
 package com.example.RentCar.controller;
 
 import com.example.RentCar.entity.Car;
-import com.example.RentCar.repository.CarRepository;
 import com.example.RentCar.service.CarService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.InputStream;
 import java.util.List;
 
 @Controller
@@ -23,6 +18,8 @@ public class CarController {
     public CarController(CarService carService) {
         this.carService = carService;
     }
+
+
 
     @GetMapping("/car/{id}")
     public String carDetail(@PathVariable Long id, Model model) {
@@ -35,14 +32,12 @@ public class CarController {
     }
 
 
+    // Tìm kiếm xe
     @GetMapping("/search")
-    public String searchCars(@RequestParam("keyword") String keyword, Model model) {
+    public String searchCars(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
         List<Car> cars = carService.searchCars(keyword);
         model.addAttribute("cars", cars);
         model.addAttribute("keyword", keyword);
-        return "/car/search"; // file search.html
+        return "/car/search";
     }
-
-
-
 }

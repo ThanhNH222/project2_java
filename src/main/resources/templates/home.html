@@ -214,20 +214,23 @@
     <div class="categories-carousel owl-carousel wow fadeInUp" data-wow-delay="0.1s">
       <div class="categories-item p-4" th:each="car : ${cars}">
         <div class="categories-item-inner">
+          <!-- Ảnh xe -->
           <div class="categories-img rounded-top">
-            <!-- Hiển thị ảnh đầu tiên của xe -->
-            <img th:src="@{${car.images[0].imageUrl}}" class="img-fluid w-100 rounded-top" alt="">
+            <img th:src="@{${car.imageUrl}}" class="img-fluid w-100 rounded-top" alt="Car image">
           </div>
+
+          <!-- Nội dung -->
           <div class="categories-content rounded-bottom p-4">
             <h4 th:text="${car.name}"></h4>
             <div class="mb-4">
               <h4 class="bg-white text-primary rounded-pill py-2 px-4 mb-0"
-                  th:text="'$' + ${car.pricePerDay} + '/Day'"></h4>
+                  th:text="${#numbers.formatDecimal(car.pricePerDay, 0, 'COMMA', 0, 'POINT')} + ' VND/Day'">
+              </h4>
             </div>
-            <a th:href="@{'/car/' + ${car.id}}"
-               class="btn btn-primary rounded-pill d-flex justify-content-center py-3">
-              Show Car
-            </a>
+            <   <a th:href="@{'/car/' + ${car.id}}"
+                   class="btn btn-primary rounded-pill d-flex justify-content-center py-3">
+            Show Car
+          </a>
           </div>
         </div>
       </div>
@@ -235,6 +238,7 @@
   </div>
 </div>
 <!-- Car categories End -->
+
 
 
 

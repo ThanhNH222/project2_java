@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface CarRepository extends JpaRepository<Car, Long> {
 
+    // Search bằng JPQL
     @Query("SELECT c FROM Car c " +
             "LEFT JOIN c.brand b " +
             "LEFT JOIN c.carType t " +

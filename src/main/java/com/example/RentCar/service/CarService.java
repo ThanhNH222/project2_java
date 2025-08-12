@@ -1,46 +1,37 @@
 package com.example.RentCar.service;
 
 import com.example.RentCar.entity.Car;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.RentCar.repository.CarRepository;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarService {
 
+    private final CarRepository carRepository;
+
+    public CarService(CarRepository carRepository) {
+        this.carRepository = carRepository;
+    }
+
+    // Lấy tất cả xe
     public List<Car> getAllCars() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            InputStream inputStream = getClass().getResourceAsStream("/static/data/data.json");
-            return mapper.readValue(inputStream, new TypeReference<List<Car>>() {});
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
+        return carRepository.findAll();
     }
 
+    // Lấy chi tiết xe theo ID
     public Car getCarById(Long id) {
-        return getAllCars().stream()
-                .filter(car -> car.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        Optional<Car> car = carRepository.findById(id);
+        return car.orElse(null);
     }
 
+    // Tìm kiếm xe
     public List<Car> searchCars(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            return getAllCars();
+            return carRepository.findAll();
         }
-        String lowerKeyword = keyword.toLowerCase();
-
-        return getAllCars().stream()
-                .filter(car ->
-                        car.getName().toLowerCase().contains(lowerKeyword) ||
-                                (car.getCarType() != null && car.getCarType().getName().toLowerCase().contains(lowerKeyword)) ||
-                                (car.getBrand() != null && car.getBrand().getName().toLowerCase().contains(lowerKeyword))
-                )
-                .toList();
+        return carRepository.searchCars(keyword);
     }
 }
