@@ -57,8 +57,10 @@ public class HomeController {
 
     @GetMapping("/cars")
     public String cars(Model model) {
+        model.addAttribute("cars", carService.getAllCars());
         return "cars";
     }
+
 
     @GetMapping("/team")
     public String team(Model model) {

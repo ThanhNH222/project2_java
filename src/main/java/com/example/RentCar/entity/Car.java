@@ -97,3 +97,4 @@ public class Car {
     public List<CarImage> getImages() { return images; }
     public void setImages(List<CarImage> images) { this.images = images; }
 }
+
