@@ -3,6 +3,7 @@ package com.example.RentCar.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "rental_rates")
@@ -22,8 +23,12 @@ public class RentalRate {
     @JoinColumn(name = "car_id")
     Car car;
 
+    public long countOverlappingRentals(Long carId, LocalDateTime pickup, LocalDateTime dropoff) {
+        return id;
+    }
+
     public enum RateType{
-        hour, day, year
+        hour, day, month
     }
 
     public Long getId() {
