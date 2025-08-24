@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý xe</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        body { background: #f6f7fb; }
+        .card-soft { border: 0; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+        .btn-soft { border-radius: 10px; }
+        .table th { background: #f1f5f9; }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="card card-soft p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0">🚗 Danh sách xe</h3>
+            <a class="btn btn-dark btn-soft" th:href="@{/admin/dashboard}">⬅ Quay lại Dashboard</a>
+            <a class="btn btn-success btn-soft" th:href="@{/admin/cars/create}">+ Thêm xe mới</a>
+        </div>
+
+        <!-- Flash message -->
+        <div th:if="${success}" class="alert alert-success rounded-3" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-danger rounded-3" th:text="${error}"></div>
+
+        <!-- Search -->
+        <form class="row mb-4" method="get" th:action="@{/admin/cars}">
+            <div class="col-md-4">
+                <input type="text" class="form-control rounded-3" name="q" placeholder="🔍 Tìm kiếm..."
+                       th:value="${param.q}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-soft w-100">Tìm</button>
+            </div>
+        </form>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên xe</th>
+                    <th>Biển số</th>
+                    <th>Số ghế</th>
+                    <th class="text-center">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="car : ${cars}">
+                    <td th:text="${car.id}"></td>
+                    <td th:text="${car.name}"></td>
+                    <td th:text="${car.licensePlate}"></td>
+                    <td th:text="${car.seatNumber}"></td>
+                    <td class="text-center">
+                        <a th:href="@{'/admin/cars/' + ${car.id} + '/edit'}"
+                           class="btn btn-warning btn-sm btn-soft me-2">✏️ Sửa</a>
+                        <form th:action="@{'/admin/cars/' + ${car.id} + '/delete'}"
+                              method="post" style="display:inline">
+                            <button type="submit" class="btn btn-danger btn-sm btn-soft"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa xe này không?')">🗑 Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(cars)}">
+                    <td colspan="5" class="text-center text-muted">Không có xe nào</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Dashboard</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body { background: #f6f7fb; font-family: "Segoe UI", sans-serif; }
+        .sidebar { width: 260px; min-height: 100vh; background: #111827; color: #fff; }
+        .sidebar a { color: #cbd5e1; text-decoration: none; display:block; padding: 12px 16px; border-radius: 12px; transition: 0.2s; }
+        .sidebar a.active, .sidebar a:hover { background:#1f2937; color: #fff; }
+        .content { margin-left: 260px; padding: 24px; }
+        .card-stat { border: 0; border-radius: 16px; color: #fff; transition: transform 0.2s; }
+        .card-stat:hover { transform: translateY(-4px); }
+        .icon-box { font-size: 32px; opacity: 0.9; }
+    </style>
+</head>
+<body>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <aside class="sidebar p-3">
+        <h4 class="mb-4">🚗 Car Rental Admin</h4>
+        <nav class="d-grid gap-2">
+            <a href="/admin" class="active">📊 Dashboard</a>
+            <a href="/admin/cars">🚘 Quản lý xe</a>
+            <a href="/admin/customers">👥 Quản lý khách hàng</a>
+            <a href="/admin/rentals">🔑 Quản lý thuê xe</a>
+            <a href="/" class="mt-3">🏠 Trang chủ</a>
+        </nav>
+    </aside>
+
+    <!-- Content -->
+    <main class="content w-100">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold">📊 Thống kê tổng quan</h3>
+        </div>
+
+        <div class="row g-4">
+            <!-- Tổng số xe -->
+            <div class="col-md-3">
+                <div class="card card-stat bg-primary shadow p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-semibold">Tổng số xe</div>
+                            <div class="fs-3 fw-bold" th:text="${carsCount} ?: '0'">0</div>
+                        </div>
+                        <i class="fa-solid fa-car icon-box"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Đang thuê -->
+            <div class="col-md-3">
+                <div class="card card-stat bg-warning shadow p-4 text-dark">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-semibold">Xe đang thuê</div>
+                            <div class="fs-3 fw-bold" th:text="${rentalsCount} ?: '0'">0</div>
+                        </div>
+                        <i class="fa-solid fa-key icon-box"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Khách hàng -->
+            <div class="col-md-3">
+                <div class="card card-stat bg-success shadow p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-semibold">Khách hàng</div>
+                            <div class="fs-3 fw-bold" th:text="${customersCount} ?: '0'">0</div>
+                        </div>
+                        <i class="fa-solid fa-users icon-box"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doanh thu -->
+            <div class="col-md-3">
+                <div class="card card-stat bg-danger shadow p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-semibold">Doanh thu</div>
+                            <div class="fs-3 fw-bold" th:text="${revenue} ?: '0 VNĐ'">0 VNĐ</div>
+                        </div>
+                        <i class="fa-solid fa-dollar-sign icon-box"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
