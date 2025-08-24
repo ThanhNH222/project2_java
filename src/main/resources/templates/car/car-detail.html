@@ -22,30 +22,11 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
 
     <style>
-        .thumbnail-img {
-            width: 100px;
-            height: 70px;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .thumbnail-img:hover {
-            transform: scale(1.1);
-            border: 2px solid #007bff;
-        }
-        .booking-form {
-            background: #6c757d;
-            padding: 25px;
-            border-radius: 8px;
-            color: white;
-        }
-        .booking-form h4 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .input-group span {
-            white-space: nowrap;
-        }
+        .thumbnail-img {width:100px;height:70px;object-fit:cover;cursor:pointer;transition:transform .2s ease;}
+        .thumbnail-img:hover {transform: scale(1.1);border: 2px solid #007bff;}
+        .booking-form {background: #6c757d;padding: 25px;border-radius: 8px;color: white;}
+        .booking-form h4 {margin-bottom: 20px;text-align: center;}
+        .input-group span {white-space: nowrap;}
     </style>
 </head>
 <body>
@@ -107,15 +88,10 @@
         <div class="col-lg-4">
             <div class="booking-form">
                 <h4>ĐẶT XE NGAY</h4>
-                <form th:action="@{/booking}" method="post">
-                    <div class="row g-3">
-                        <!-- Chọn loại xe -->
-                        <div class="col-12">
-                            <select class="form-select" name="carId" required>
-                                <option th:value="${car.id}" th:text="${car.name}" selected></option>
-                            </select>
-                        </div>
+                <form id="bookingForm" th:action="@{/payment}" method="get" th:data-car-id="${car.id}">
+                    <input type="hidden" name="carId" th:value="${car.id}" />
 
+                    <div class="row g-3">
                         <!-- Nơi nhận -->
                         <div class="col-12">
                             <div class="input-group">
@@ -145,12 +121,12 @@
                                     <span class="fas fa-calendar-alt"></span>
                                     <span class="ms-1">Ngày nhận</span>
                                 </div>
-                                <input class="form-control" type="date" name="pickupDate" required>
-                                <select class="form-select ms-3" name="pickupTime" required>
+                                <input id="pickupDate" class="form-control" type="date" name="pickupDate" required>
+                                <select id="pickupTime" class="form-select ms-3" name="pickupTime" required>
                                     <option value="">Chọn giờ</option>
                                     <option th:each="h : ${#numbers.sequence(0,23)}"
-                                            th:value="${h + ':00'}"
-                                            th:text="${h + ':00'}">
+                                            th:value="${T(java.lang.String).format('%02d:00', h)}"
+                                            th:text="${T(java.lang.String).format('%02d:00', h)}">
                                     </option>
                                 </select>
                             </div>
@@ -163,15 +139,20 @@
                                     <span class="fas fa-calendar-alt"></span>
                                     <span class="ms-1">Ngày trả</span>
                                 </div>
-                                <input class="form-control" type="date" name="dropoffDate" required>
-                                <select class="form-select ms-3" name="dropoffTime" required>
+                                <input id="dropoffDate" class="form-control" type="date" name="dropoffDate" required>
+                                <select id="dropoffTime" class="form-select ms-3" name="dropoffTime" required>
                                     <option value="">Chọn giờ</option>
                                     <option th:each="h : ${#numbers.sequence(0,23)}"
-                                            th:value="${h + ':00'}"
-                                            th:text="${h + ':00'}">
+                                            th:value="${T(java.lang.String).format('%02d:00', h)}"
+                                            th:text="${T(java.lang.String).format('%02d:00', h)}">
                                     </option>
                                 </select>
                             </div>
+                        </div>
+
+                        <!-- Thông báo tình trạng xe -->
+                        <div class="col-12">
+                            <div id="availabilityMessage"></div>
                         </div>
 
                         <!-- Nút đặt -->
@@ -209,5 +190,45 @@
     }
 </script>
 
+<script>
+    async function checkAvailability() {
+      const bookingForm = document.getElementById("bookingForm");
+      const carId = bookingForm.dataset.carId;
+
+      const pickupDate = document.getElementById("pickupDate").value;
+      const pickupTime = document.getElementById("pickupTime").value;
+      const dropoffDate = document.getElementById("dropoffDate").value;
+      const dropoffTime = document.getElementById("dropoffTime").value;
+
+      if (!pickupDate || !pickupTime || !dropoffDate || !dropoffTime) return;
+
+      try {
+        const response = await fetch(`/car/check-availability?carId=${carId}&pickupDate=${pickupDate}&pickupTime=${pickupTime}&dropoffDate=${dropoffDate}&dropoffTime=${dropoffTime}`);
+        const text = await response.text();
+
+        const messageBox = document.getElementById("availabilityMessage");
+        if (text === "available") {
+          messageBox.innerHTML = `<span class="text-success">✅ Xe có sẵn để đặt.</span>`;
+        } else if (text === "unavailable") {
+          messageBox.innerHTML = `<span class="text-danger">❌ Xe đã có người đặt trong khoảng thời gian này.</span>`;
+        } else {
+          messageBox.innerHTML = `<span class="text-warning">⚠️ Không kiểm tra được tình trạng xe.</span>`;
+        }
+      } catch (error) {
+        console.error("Lỗi kiểm tra:", error);
+      }
+    }
+
+    document.getElementById("pickupDate").addEventListener("change", checkAvailability);
+    document.getElementById("pickupTime").addEventListener("change", checkAvailability);
+    document.getElementById("dropoffDate").addEventListener("change", checkAvailability);
+    document.getElementById("dropoffTime").addEventListener("change", checkAvailability);
+</script>
 </body>
 </html>
+```
+
+---
+
+Bạn muốn mình làm thêm luôn phần **disable nút "Đặt ngay"** nếu xe không khả dụng không?
+
