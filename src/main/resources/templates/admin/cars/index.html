@@ -42,6 +42,7 @@
                 <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Ảnh</th>
                     <th>Tên xe</th>
                     <th>Biển số</th>
                     <th>Số ghế</th>
@@ -51,6 +52,9 @@
                 <tbody>
                 <tr th:each="car : ${cars}">
                     <td th:text="${car.id}"></td>
+                    <td>
+                        <img th:src="@{${car.imageUrl}}" alt="Car Image" style="width:100px; height:auto; border-radius:8px;">
+                    </td>
                     <td th:text="${car.name}"></td>
                     <td th:text="${car.licensePlate}"></td>
                     <td th:text="${car.seatNumber}"></td>
@@ -65,7 +69,7 @@
                     </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(cars)}">
-                    <td colspan="5" class="text-center text-muted">Không có xe nào</td>
+                    <td colspan="6" class="text-center text-muted">Không có xe nào</td>
                 </tr>
                 </tbody>
             </table>
