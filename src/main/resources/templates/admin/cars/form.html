@@ -3,50 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${mode == 'create'} ? 'Thêm xe' : 'Sửa xe'"></title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <style>
-        body { background: #f6f7fb; }
-        .card-soft { border: 0; border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
-        .btn-soft { border-radius: 10px; }
-        label { font-weight: 600; }
+        body {
+            background: #0f172a; /* dark */
+            color: #fff;
+            font-family: "Segoe UI", sans-serif;
+        }
+        .sidebar {
+            width: 220px;
+            min-height: 100vh;
+            background: #1e293b;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 12px;
+            margin-bottom: 8px;
+            text-decoration: none;
+            color: #cbd5e1;
+            border-radius: 8px;
+        }
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #334155;
+            color: #fff;
+        }
+        .content {
+            margin-left: 240px;
+            padding: 24px;
+        }
+        .card-dark {
+            background: #1e293b;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+            color: #fff;
+            padding: 24px;
+        }
+        .btn-soft {
+            border-radius: 8px;
+        }
+        label {
+            font-weight: 600;
+        }
+        input, .form-control {
+            background: #334155;
+            color: #fff;
+            border: none;
+        }
+        input:focus, .form-control:focus {
+            background: #475569;
+            color: #fff;
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
 
-<form th:action="${mode == 'create'} ? @{/admin/cars/save} : @{'/admin/cars/' + ${car.id} + '/update'}"
-      th:object="${car}" method="post" class="mt-4" enctype="multipart/form-data">
+<!-- Sidebar -->
+<div class="sidebar">
+    <h4 class="text-white mb-4">🚗 Car Rental</h4>
+    <a href="/admin">📊 Dashboard</a>
+    <a href="/admin/cars" class="active">🚘 Quản lý xe</a>
+    <a href="/admin/customers">👥 Khách hàng</a>
+    <a href="/admin/rentals">🔑 Thuê xe</a>
+</div>
 
-    <div class="mb-3">
-        <label class="form-label">Tên xe</label>
-        <input type="text" th:field="*{name}" class="form-control rounded-3" required>
-    </div>
+<!-- Content -->
+<div class="content">
+    <div class="card-dark">
+        <h3 th:text="${mode == 'create'} ? '➕ Thêm xe' : '✏️ Sửa xe'"></h3>
 
-    <div class="mb-3">
-        <label class="form-label">Biển số</label>
-        <input type="text" th:field="*{licensePlate}" class="form-control rounded-3" required>
-    </div>
+        <form th:action="${mode == 'create'} ? @{/admin/cars/save} : @{'/admin/cars/' + ${car.id} + '/update'}"
+              th:object="${car}" method="post" enctype="multipart/form-data" class="mt-4">
 
-    <div class="mb-3">
-        <label class="form-label">Số ghế</label>
-        <input type="number" th:field="*{seatNumber}" class="form-control rounded-3" required>
-    </div>
+            <div class="mb-3">
+                <label class="form-label">Tên xe</label>
+                <input type="text" th:field="*{name}" class="form-control rounded-3" required>
+            </div>
 
-    <div class="mb-3">
-        <label class="form-label">Ảnh xe</label>
-        <input type="file" name="imageFile" class="form-control rounded-3" accept="image/*" onchange="previewImage(event)">
-    </div>
+            <div class="mb-3">
+                <label class="form-label">Biển số</label>
+                <input type="text" th:field="*{licensePlate}" class="form-control rounded-3" required>
+            </div>
 
-    <!-- Preview ảnh -->
-    <div class="mb-3">
-        <img id="imagePreview" th:if="${car.imageUrl}" th:src="@{${car.imageUrl}}"
-             style="max-width:200px; max-height:150px; border-radius:8px; display:block;">
-    </div>
+            <div class="mb-3">
+                <label class="form-label">Số ghế</label>
+                <input type="number" th:field="*{seatNumber}" class="form-control rounded-3" required>
+            </div>
 
-    <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary btn-soft">💾 Lưu</button>
-        <a th:href="@{/admin/cars}" class="btn btn-secondary btn-soft">⬅ Quay lại</a>
+            <div class="mb-3">
+                <label class="form-label">Ảnh xe</label>
+                <input type="file" name="imageFile" class="form-control rounded-3" accept="image/*" onchange="previewImage(event)">
+            </div>
+
+            <!-- Preview ảnh -->
+            <div class="mb-3">
+                <img id="imagePreview" th:if="${car.imageUrl}" th:src="@{${car.imageUrl}}"
+                     style="max-width:200px; max-height:150px; border-radius:8px; display:block;">
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-soft">💾 Lưu</button>
+                <a th:href="@{/admin/cars}" class="btn btn-secondary btn-soft">⬅ Quay lại</a>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
 <script>
     function previewImage(event) {

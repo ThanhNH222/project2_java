@@ -10,9 +10,15 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Liên kết với Car
     @ManyToOne
     @JoinColumn(name = "car_id")
-    private Car car; // liên kết với Car
+    private Car car;
+
+    // Liên kết với Customer
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @Column(name = "pickup_location")
     private String pickupLocation;
@@ -41,6 +47,9 @@ public class Rental {
 
     public Car getCar() { return car; }
     public void setCar(Car car) { this.car = car; }
+
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) { this.customer = customer; }
 
     public String getPickupLocation() { return pickupLocation; }
     public void setPickupLocation(String pickupLocation) { this.pickupLocation = pickupLocation; }
