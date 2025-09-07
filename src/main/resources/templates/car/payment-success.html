@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Xác nhận thanh toán</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">✅ Thanh toán thành công</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="mb-3">Cảm ơn <span th:text="${rental.customerName}"></span> đã đặt xe!</h5>
+
+            <h6>📌 Thông tin khách hàng</h6>
+            <ul class="list-unstyled mb-3">
+                <li><strong>Họ tên:</strong> <span th:text="${rental.customerName}"></span></li>
+                <li><strong>Số điện thoại:</strong> <span th:text="${rental.customerPhone}"></span></li>
+                <li><strong>Email:</strong> <span th:text="${rental.customerEmail}"></span></li>
+            </ul>
+
+            <h6>🚗 Thông tin thuê xe</h6>
+            <ul class="list-unstyled mb-3">
+                <li><strong>Xe:</strong> <span th:text="${rental.car.name}"></span></li>
+                <li><strong>Hình thức thuê:</strong> <span th:text="${rental.rentalType}"></span></li>
+                <li><strong>Thời gian nhận xe:</strong>
+                    <span th:text="${#temporals.format(rental.pickupDateTime, 'dd/MM/yyyy HH:mm')}"></span>
+                </li>
+                <li><strong>Thời gian trả xe:</strong>
+                    <span th:text="${#temporals.format(rental.dropoffDateTime, 'dd/MM/yyyy HH:mm')}"></span>
+                </li>
+            </ul>
+
+            <h6>💰 Thanh toán</h6>
+            <ul class="list-unstyled">
+                <li><strong>Giá thuê:</strong> <span th:text="${#numbers.formatDecimal(rental.rentalPrice, 0, 'COMMA', 0, 'POINT')}"></span> VND</li>
+                <li><strong>Tiền cọc:</strong> <span th:text="${#numbers.formatDecimal(rental.depositAmount, 0, 'COMMA', 0, 'POINT')}"></span> VND</li>
+                <li><strong>Phí giao xe:</strong> <span th:text="${#numbers.formatDecimal(rental.shippingFee, 0, 'COMMA', 0, 'POINT')}"></span> VND</li>
+                <li><strong>Tổng thanh toán ban đầu:</strong> <span th:text="${#numbers.formatDecimal(rental.totalPayment, 0, 'COMMA', 0, 'POINT')}"></span> VND</li>
+<!--                <li><strong>Số tiền sẽ hoàn trả khi kết thúc thuê:</strong>-->
+<!--                    <span th:text="${#numbers.formatDecimal(rental.depositAmount, 0, 'COMMA', 0, 'POINT')}"></span> VND-->
+<!--                </li>-->
+
+                <li>
+                    <strong>Kết toán khi trả xe:</strong>
+                    <span th:if="${payment.refundAmount > 0}"
+                          th:text="'Hoàn lại: ' + ${#numbers.formatDecimal(payment.refundAmount, 0, 'COMMA', 0, 'POINT')} + ' VND'"
+                          style="color:green; font-weight:bold;">
+    </span>
+
+                    <span th:if="${payment.refundAmount < 0}"
+                          th:text="'Thu thêm: ' + ${#numbers.formatDecimal(payment.refundAmount.abs(), 0, 'COMMA', 0, 'POINT')} + ' VND'"
+                          style="color:red; font-weight:bold;">
+    </span>
+
+                    <span th:if="${payment.refundAmount == 0}"
+                          style="color:gray; font-style:italic;">
+        Không phát sinh thêm chi phí
+    </span>
+                </li>
+
+
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
