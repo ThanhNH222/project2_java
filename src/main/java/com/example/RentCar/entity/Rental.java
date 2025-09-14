@@ -17,10 +17,6 @@ public class Rental {
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
-//    @ManyToOne
-//    @JoinColumn(name = "customer_id", nullable = false)
-//    private Customer customer;
-
     // ====== Thông tin thuê xe / thanh toán ======
     private String rentalType;
 
@@ -60,7 +56,6 @@ public class Rental {
     private String customerName;
     private String customerPhone;
     private String customerEmail;
-
     private String paymentMethod;
 
     // ====== Trạng thái ======
@@ -98,6 +93,9 @@ public class Rental {
         updatedAt = LocalDateTime.now();
     }
 
+    @Column(name = "admin_notes")
+    private String adminNotes;
+
     // ====== Getter & Setter ======
     public Long getId() {
         return id;
@@ -114,14 +112,6 @@ public class Rental {
     public void setCar(Car car) {
         this.car = car;
     }
-//
-//    public Customer getCustomer() {
-//        return customer;
-//    }
-//
-//    public void setCustomer(Customer customer) {
-//        this.customer = customer;
-//    }
 
     public String getRentalType() {
         return rentalType;
@@ -299,6 +289,24 @@ public class Rental {
         this.payments = payments;
     }
 
+    public String getAdminNotes() {
+        return adminNotes;
+    }
+
+    public void setAdminNotes(String adminNotes) {
+        this.adminNotes = adminNotes;
+    }
+    // ====== Xác nhận khách hàng ======
+    @Column(name = "confirmation_token", length = 100)
+    private String confirmationToken;
+
+    public String getConfirmationToken() {
+        return confirmationToken;
+    }
+
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
+    }
 
 }
 

@@ -1,7 +1,7 @@
 package com.example.RentCar.controller.admin;
 
 import com.example.RentCar.repository.CarRepository;
-import com.example.RentCar.repository.CustomerRepository;
+import com.example.RentCar.repository.RentalRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminDashboardController {
 
     private final CarRepository carRepository;
-    private final CustomerRepository customerRepository;
+    private final RentalRepository rentalRepository;
 
-    public AdminDashboardController(CarRepository carRepository, CustomerRepository customerRepository) {
+    public AdminDashboardController(CarRepository carRepository, RentalRepository rentalRepository) {
         this.carRepository = carRepository;
-        this.customerRepository = customerRepository;
+        this.rentalRepository = rentalRepository;
     }
 
     @GetMapping({"", "/", "/dashboard"})
     public String dashboard(Model model) {
         long carsCount = carRepository.count();
-        long customersCount = customerRepository.count();
+        long customersCount = rentalRepository.count();
 
         // TODO: sau này thêm logic cho đang thuê, doanh thu
         long rentingCars = 0;

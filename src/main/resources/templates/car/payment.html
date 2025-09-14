@@ -101,7 +101,9 @@
 
             <div class="booking-form">
 <!--                <h4>Thông tin khách hàng</h4>-->
-                <form th:action="@{/payment-success}" method="post">
+                <form th:action="@{/pay}" method="get">
+                    <input type="hidden" name="amount" th:value="${totalAmount}">
+                    <input type="hidden" name="currency" value="USD">
                     <input type="hidden" name="carId" th:value="${car.id}" />
                     <input type="hidden" name="rentalType" th:value="${rentalType}" />
                     <input type="hidden" name="pickupDateTime" th:value="${pickupDateTime}" />
@@ -155,7 +157,9 @@
                         </div>
 
                     <!-- Nút submit: khi nhấn sẽ gọi PaymentController và gửi email -->
-                    <button type="submit" class="btn btn-primary w-100">Xác nhận thanh toán</button>
+                    <button type="submit" class="btn btn-primary w-100">
+                        Xác nhận thanh toán
+                    </button>
                 </form>
 
             </div>

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface RentalRepository extends JpaRepository<Rental, Long> {
 
@@ -17,4 +18,16 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
     List<Rental> findOverlappingRentals(@Param("carId") Long carId,
                                         @Param("pickupDateTime") LocalDateTime pickupDateTime,
                                         @Param("dropoffDateTime") LocalDateTime dropoffDateTime);
+
+    List<Rental> findByCustomerNameContainingIgnoreCaseOrCustomerEmailContainingIgnoreCase(
+            String customerName, String customerEmail);
+
+    List<Rental> findByStatus(String status);
+
+    List<Rental> findByStatusAndCustomerNameContainingIgnoreCaseOrStatusAndCustomerEmailContainingIgnoreCase(
+            String status1, String customerName, String status2, String customerEmail);
+
+
+    Optional<Rental> findByConfirmationToken(String confirmationToken);
+
 }

@@ -98,6 +98,8 @@ public class PaymentController {
         model.addAttribute("customerName", customerName);
         model.addAttribute("customerPhone", customerPhone);
         model.addAttribute("customerEmail", customerEmail);
+        model.addAttribute("totalAmount", totalPayment);
+
 
 
         return "car/payment";
