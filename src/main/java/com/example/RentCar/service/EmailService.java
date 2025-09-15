@@ -45,14 +45,23 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setTo(rental.getCustomerEmail());
-        helper.setSubject("Xác nhận nhận xe - " + rental.getCar().getName());
+        helper.setSubject("Xác nhận đã nhận xe - " + rental.getCar().getName());
 
-        String content = "<h3>Xin chào " + rental.getCustomerName() + ",</h3>"
+        String content = "<div style='font-family: Arial, sans-serif; font-size:14px; color:#333;'>"
+                + "<h3>Xin chào " + rental.getCustomerName() + ",</h3>"
                 + "<p>Bạn đã đặt xe <strong>" + rental.getCar().getName() + "</strong>.</p>"
-                + "<p>Vui lòng bấm vào liên kết sau để xác nhận đã nhận xe:</p>"
-                + "<p><a href='" + confirmUrl + "'>Xác nhận đã nhận xe</a></p>";
+                + "<p>Vui lòng nhấn vào nút bên dưới để xác nhận rằng bạn đã nhận xe:</p>"
+                + "<p style='margin:20px 0;'>"
+                + "    <a href='" + confirmUrl + "' "
+                + "       style='display:inline-block;padding:12px 20px;background-color:#4CAF50;"
+                + "              color:white;text-decoration:none;border-radius:5px;font-weight:bold;'>"
+                + "       ✅ Xác nhận đã nhận xe</a>"
+                + "</p>"
+                + "<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>"
+                + "</div>";
 
-        helper.setText(content, true);
+        helper.setText(content, true); // true = cho phép HTML
         mailSender.send(message);
     }
+
 }
