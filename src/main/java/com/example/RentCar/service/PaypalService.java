@@ -11,13 +11,23 @@ import java.util.List;
 
 @Service
 public class PaypalService {
+
     private final PayPalHttpClient payPalClient;
 
     public PaypalService(PayPalHttpClient payPalClient) {
         this.payPalClient = payPalClient;
     }
 
-    public String createOrder(String amount, String currency, String returnUrl, String cancelUrl) throws IOException {
+    /**
+     * Tạo order PayPal
+     *
+     * @param amount    Giá trị thanh toán (format string 2 chữ số thập phân)
+     * @param currency  Mã tiền tệ (USD)
+     * @param returnUrl URL callback khi thanh toán thành công
+     * @param cancelUrl URL callback khi hủy
+     * @return approval link (URL redirect user sang PayPal)
+     */
+    public String createOrder(String amount, String currency, String returnUrl, String cancelUrl) {
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.checkoutPaymentIntent("CAPTURE");
 
@@ -34,17 +44,30 @@ public class PaypalService {
 
         OrdersCreateRequest request = new OrdersCreateRequest().requestBody(orderRequest);
 
-        HttpResponse<Order> response = payPalClient.execute(request);
-        if (response.statusCode() == 201) {
-            for (LinkDescription link : response.result().links()) {
-                if ("approve".equals(link.rel())) {
-                    return link.href(); // URL để redirect user qua PayPal
+        try {
+            HttpResponse<Order> response = payPalClient.execute(request);
+            if (response.statusCode() == 201) {
+                for (LinkDescription link : response.result().links()) {
+                    if ("approve".equals(link.rel())) {
+                        return link.href(); // URL redirect user sang PayPal
+                    }
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // có thể log lỗi hoặc ném RuntimeException nếu muốn dừng xử lý
         }
-        return null;
+
+        return null; // nếu tạo order thất bại
     }
 
+    /**
+     * Capture order đã được approve
+     *
+     * @param orderId ID order PayPal
+     * @return HttpResponse<Order>
+     * @throws IOException
+     */
     public HttpResponse<Order> captureOrder(String orderId) throws IOException {
         OrdersCaptureRequest request = new OrdersCaptureRequest(orderId);
         return payPalClient.execute(request);

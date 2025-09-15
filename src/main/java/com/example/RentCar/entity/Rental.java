@@ -308,5 +308,7 @@ public class Rental {
         this.confirmationToken = confirmationToken;
     }
 
+    public void setPaypalOrderId(String orderId) {
+    }
 }
 

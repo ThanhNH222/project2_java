@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${car.name}">Chi tiết xe</title>
+    <title th:text="${car.name}">Car Details</title>
 
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,16 +38,15 @@
     <div class="row justify-content-center">
         <div class="col-lg-11">
 
-
-        <!-- Trái: Ảnh + thông tin bổ sung -->
+            <!-- Left: Images + extra info -->
             <div class="row g-4 mb-4">
                 <div class="col-lg-12">
-            <!-- Ảnh chính -->
-            <div class="border rounded mb-3">
-                <img id="mainImage" th:src="${car.imageUrl}" class="img-fluid rounded w-100" alt="Car Image">
-            </div>
+                    <!-- Main Image -->
+                    <div class="border rounded mb-3">
+                        <img id="mainImage" th:src="${car.imageUrl}" class="img-fluid rounded w-100" alt="Car Image">
+                    </div>
 
-                    <div class="col-md-3 d-flex flex-column gap-2"
+                    <div class="d-flex flex-row flex-wrap gap-2 mt-2"
                          th:if="${car.images != null and !car.images.isEmpty()}">
                         <img th:each="img : ${car.images}"
                              th:src="${img.imageUrl}"
@@ -55,174 +56,168 @@
                     </div>
 
                     <div class="row g-5">
-                        <!-- Trái: Thông tin khác -->
+                        <!-- Left: Car Information -->
                         <div class="col-lg-8">
                             <div class="p-3 bg-light rounded shadow-sm mb-4">
-                                <h5>Thông tin xe</h5>
-                                <h2 class="mb-3" th:text="${car.name}">Tên xe</h2>
+                                <h5>Car Information</h5>
+                                <h2 class="mb-3" th:text="${car.name}">Car Name</h2>
                                 <p th:text="${car.description}"></p>
 
                                 <ul class="list-unstyled">
+                                    <li><strong>License Plate:</strong> <span th:text="${car.licensePlate}"></span></li>
+                                    <li><strong>Number of Seats:</strong> <span th:text="${car.seatNumber}"></span></li>
+                                    <li><strong>Car Type:</strong> <span th:text="${car.carType.name}"></span></li>
+                                    <li><strong>Brand:</strong> <span th:text="${car.brand.name}"></span></li>
+                                    <li><strong>Status:</strong> <span th:text="${car.status}"></span></li>
+                                    <li><strong>Deposit:</strong>
+                                        <span th:text="${#numbers.formatDecimal(car.depositAmount, 0, 'POINT', 0, 'COMMA')} + ' VND'"></span>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                <li><strong>Biển số:</strong> <span th:text="${car.licensePlate}"></span></li>
-                <li><strong>Số ghế:</strong> <span th:text="${car.seatNumber}"></span></li>
-                <li><strong>Loại xe:</strong> <span th:text="${car.carType.name}"></span></li>
-                <li><strong>Hãng xe:</strong> <span th:text="${car.brand.name}"></span></li>
-                <li><strong>Trạng thái:</strong> <span th:text="${car.status}"></span></li>
-                <li><strong>Tiền cọc:</strong>
-                    <span th:text="${#numbers.formatDecimal(car.depositAmount, 0, 'POINT', 0, 'COMMA')} + ' VND'"></span>
-                </li>
-            </ul>
-        </div>
-
-                            <!-- Block bổ sung -->
+                            <!-- Extra Block -->
                             <div class="p-3 bg-light rounded shadow-sm">
-                                <h5>Thông tin khác</h5>
-                                <p>Ở đây bạn có thể thêm: chính sách thuê xe, đánh giá khách hàng, hoặc bảng giá chi tiết…</p>
+                                <h5>Additional Information</h5>
+                                <p>Here you can add: rental policies, customer reviews, or detailed pricing…</p>
                             </div>
                         </div>
 
-        <!-- Cột 3: Form đặt xe -->
-                        <div class="col-lg-4">            <div class="booking-form">
-                <h4>ĐẶT XE NGAY</h4>
-                <form id="bookingForm" th:action="@{/payment}" method="post" th:data-car-id="${car.id}" onsubmit="beforeSubmit()">
-                    <input type="hidden" name="carId" th:value="${car.id}" />
+                        <!-- Right: Booking Form -->
+                        <div class="col-lg-4">
+                            <div class="booking-form">
+                                <h4>BOOK NOW</h4>
+                                <form id="bookingForm" th:action="@{/payment}" method="post" th:data-car-id="${car.id}" onsubmit="beforeSubmit()">
+                                    <input type="hidden" name="carId" th:value="${car.id}" />
+                                    <input type="hidden" name="isStorePickup" id="isStorePickup" value="false" />
 
-                    <input type="hidden" name="isStorePickup" id="isStorePickup" value="false" />
+                                    <!-- Rental type -->
+                                    <div th:if="${car.rentalRates != null and !car.rentalRates.isEmpty()}" class="col-12">
+                                        <div class="input-group">
+                                            <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                <span class="fas fa-tag"></span>
+                                                <span class="ms-1">Rental Type</span>
+                                            </div>
+                                            <select class="form-select" id="rentalType" name="rentalType" onchange="updatePrice()" required>
+                                                <option value="">-- Select rental type --</option>
+                                                <option th:each="rate : ${car.rentalRates}"
+                                                        th:value="${rate.rateType}"
+                                                        th:data-price="${rate.price}"
+                                                        th:text="${rate.rateType}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="mt-2 text-end">
+                                            <span class="text-light">Price: </span>
+                                            <span id="rentalPrice" class="text-warning fw-bold"
+                                                  th:text="${#numbers.formatDecimal(car.rentalRates[0].price, 0, 'COMMA', 0, 'POINT')}">...</span> usd
+                                        </div>
+                                    </div>
 
-                    <!-- Giá và hình thức thuê -->
-                    <div th:if="${car.rentalRates != null and !car.rentalRates.isEmpty()}" class="col-12">
-                        <div class="input-group">
-                            <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
-                                <span class="fas fa-tag"></span>
-                                <span class="ms-1">Hình thức thuê</span>
+                                    <div class="row g-3">
+                                        <!-- Store pickup -->
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                    <span class="fas fa-store"></span>
+                                                    <span class="ms-1">Pickup/Drop-off at Store</span>
+                                                </div>
+                                                <select class="form-select" id="storeLocation" name="storeLocation"
+                                                        onchange="document.getElementById('pickupLocation').value = this.options[this.selectedIndex].text">
+                                                    <option value="">-- Select store --</option>
+                                                    <option value="1">Branch 1 - 123 Le Loi, District 1</option>
+                                                    <option value="2">Branch 2 - 456 Nguyen Hue, District 3</option>
+                                                    <option value="3">Branch 3 - 789 Hai Ba Trung, District 5</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Other pickup location -->
+                                        <div class="col-12">
+                                            <label for="storeLocation" class="form-label">Other Address (not store)</label>
+                                            <div class="input-group">
+                                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                    <span class="fas fa-map-marker-alt"></span>
+                                                    <span class="ms-1">Pickup Location</span>
+                                                </div>
+                                                <input class="form-control" type="text" id="pickupLocation" name="pickupLocation" placeholder="Enter pickup address" required>
+                                            </div>
+                                        </div>
+
+                                        <!-- Drop-off -->
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                    <span class="fas fa-map-marker-alt"></span>
+                                                    <span class="ms-1">Drop-off Location</span>
+                                                </div>
+                                                <input class="form-control" type="text" id="dropoffLocation" name="dropoffLocation" placeholder="Enter drop-off address" required>
+                                            </div>
+                                        </div>
+
+                                        <!-- Pickup date/time -->
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                    <span class="fas fa-calendar-alt"></span>
+                                                    <span class="ms-1">Pickup Date</span>
+                                                </div>
+                                                <input id="pickupDate" class="form-control" type="date" name="pickupDate" required>
+                                                <select id="pickupTime" class="form-select ms-3" name="pickupTime" required>
+                                                    <option value="">Select Time</option>
+                                                    <option th:each="h : ${#numbers.sequence(0,23)}"
+                                                            th:value="${T(java.lang.String).format('%02d:00', h)}"
+                                                            th:text="${T(java.lang.String).format('%02d:00', h)}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Drop-off date/time -->
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
+                                                    <span class="fas fa-calendar-alt"></span>
+                                                    <span class="ms-1">Drop-off Date</span>
+                                                </div>
+                                                <input id="dropoffDate" class="form-control" type="date" name="dropoffDate" required>
+                                                <select id="dropoffTime" class="form-select ms-3" name="dropoffTime" required>
+                                                    <option value="">Select Time</option>
+                                                    <option th:each="h : ${#numbers.sequence(0,23)}"
+                                                            th:value="${T(java.lang.String).format('%02d:00', h)}"
+                                                            th:text="${T(java.lang.String).format('%02d:00', h)}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Availability message -->
+                                        <div class="col-12">
+                                            <div id="availabilityMessage"></div>
+                                        </div>
+
+                                        <!-- Customer info -->
+                                        <div class="mb-3">
+                                            <label for="customerName" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="customerName" name="customerName" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="customerPhone" class="form-label">Phone Number</label>
+                                            <input type="text" class="form-control" id="customerPhone" name="customerPhone" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="customerEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
+                                        </div>
+
+                                        <div class="col-12 mt-3">
+                                            <button class="btn btn-light w-100 py-2" type="submit">Book Now</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <select class="form-select" id="rentalType" name="rentalType" onchange="updatePrice()" required>
-                                <option value="">-- Chọn hình thức thuê --</option>
-                                <option th:each="rate : ${car.rentalRates}"
-                                        th:value="${rate.rateType}"
-                                        th:data-price="${rate.price}"
-                                        th:text="${rate.rateType}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mt-2 text-end">
-                            <span class="text-light">Giá: </span>
-                            <span id="rentalPrice" class="text-warning fw-bold"
-                                  th:text="${#numbers.formatDecimal(car.rentalRates[0].price, 0, 'COMMA', 0, 'POINT')}">...</span> VND
                         </div>
                     </div>
-
-
-                    <div class="row g-3">
-
-                        <!-- Chọn cơ sở cửa hàng -->
-                        <div class="col-12">
-                            <div class="input-group">
-                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
-                                    <span class="fas fa-store"></span>
-                                    <span class="ms-1">Nhận trả tại cửa hàng</span>
-                                </div>
-                                <select class="form-select" id="storeLocation" name="storeLocation"
-                                        onchange="document.getElementById('pickupLocation').value = this.options[this.selectedIndex].text">
-                                    <option value="">-- Chọn cơ sở --</option>
-                                    <option value="1">Cơ sở 1 - 123 Lê Lợi, Quận 1</option>
-                                    <option value="2">Cơ sở 2 - 456 Nguyễn Huệ, Quận 3</option>
-                                    <option value="3">Cơ sở 3 - 789 Hai Bà Trưng, Quận 5</option>
-                                </select>
-                            </div>
-                        </div>
-
-
-
-                        <!-- Nơi nhận -->
-                        <div class="col-12">
-                            <label for="storeLocation" class="form-label">Địa chỉ khác ngoài cửa hàng</label>
-
-                            <div class="input-group">
-                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
-                                    <span class="fas fa-map-marker-alt"></span>
-                                    <span class="ms-1">Nơi nhận</span>
-                                </div>
-                                <input class="form-control" type="text" id="pickupLocation" name="pickupLocation" placeholder="Địa chỉ nhận khác" required>
-                            </div>
-                        </div>
-
-                        <!-- Nơi trả -->
-                        <div class="col-12">
-                            <div class="input-group">
-                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
-                                    <span class="fas fa-map-marker-alt"></span>
-                                    <span class="ms-1">Nơi trả</span>
-                                </div>
-                                <input class="form-control" type="text" id="dropoffLocation" name="dropoffLocation" placeholder="Địa chỉ trả khác" required>
-                            </div>
-                        </div>
-
-                        <!-- Ngày & giờ nhận -->
-                        <div class="col-12">
-                            <div class="input-group">
-                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
-                                    <span class="fas fa-calendar-alt"></span>
-                                    <span class="ms-1">Ngày nhận</span>
-                                </div>
-                                <input id="pickupDate" class="form-control" type="date" name="pickupDate" required>
-                                <select id="pickupTime" class="form-select ms-3" name="pickupTime" required>
-                                    <option value="">Chọn giờ</option>
-                                    <option th:each="h : ${#numbers.sequence(0,23)}"
-                                            th:value="${T(java.lang.String).format('%02d:00', h)}"
-                                            th:text="${T(java.lang.String).format('%02d:00', h)}">
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Ngày & giờ trả -->
-                        <div class="col-12">
-                            <div class="input-group">
-                                <div class="d-flex align-items-center bg-light text-body rounded-start p-2">
-                                    <span class="fas fa-calendar-alt"></span>
-                                    <span class="ms-1">Ngày trả</span>
-                                </div>
-                                <input id="dropoffDate" class="form-control" type="date" name="dropoffDate" required>
-                                <select id="dropoffTime" class="form-select ms-3" name="dropoffTime" required>
-                                    <option value="">Chọn giờ</option>
-                                    <option th:each="h : ${#numbers.sequence(0,23)}"
-                                            th:value="${T(java.lang.String).format('%02d:00', h)}"
-                                            th:text="${T(java.lang.String).format('%02d:00', h)}">
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Thông báo tình trạng xe -->
-                        <div class="col-12">
-                            <div id="availabilityMessage"></div>
-                        </div>
-
-                        <!-- Thông tin khách hàng -->
-                        <div class="mb-3">
-                            <label for="customerName" class="form-label">Họ và tên</label>
-                            <input type="text" class="form-control" id="customerName" name="customerName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="customerPhone" class="form-label">Số điện thoại</label>
-                            <input type="text" class="form-control" id="customerPhone" name="customerPhone" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="customerEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
-                        </div>
-
-                        <div class="col-12 mt-3">
-                            <button class="btn btn-light w-100 py-2" type="submit">Đặt ngay</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                </div>
             </div>
         </div>
     </div>

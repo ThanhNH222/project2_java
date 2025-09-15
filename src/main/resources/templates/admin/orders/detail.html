@@ -46,8 +46,8 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">Thông tin xe thuê</div>
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">Thông tin xe thuê</div>
                 <div class="card-body p-0">
                     <table class="table mb-0">
                         <tr>
@@ -75,6 +75,19 @@
                             <td th:text="${order.returnLocation}"></td>
                         </tr>
                         <tr>
+                            <th>Tiền thuê</th>
+                            <td th:text="${order.rentalPrice != null ? T(java.lang.String).format('%,.0f₫', order.rentalPrice) : '0₫'}"></td>
+                        </tr>
+                        <tr>
+                            <th>Tiền cọc</th>
+                            <td th:text="${order.depositAmount != null ? T(java.lang.String).format('%,.0f₫', order.depositAmount) : '0₫'}"></td>
+                        </tr>
+                        <tr>
+                            <th>Phí ship</th>
+                            <td th:text="${order.shippingFee != null ? T(java.lang.String).format('%,.0f₫', order.shippingFee) : '0₫'}"></td>
+                        </tr>
+
+                        <tr>
                             <th>Trạng thái</th>
                             <td th:text="${order.status}"></td>
                         </tr>
@@ -85,7 +98,7 @@
 
         <!-- Cột phải: ghi chú admin -->
         <div class="col-lg-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm mb-4">
                 <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                     <span>Ghi chú của Admin</span>
                     <button class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#editNotes">
@@ -104,7 +117,7 @@
                     <!-- Form sửa/ghi chú -->
                     <div class="collapse mt-3" id="editNotes">
                         <form th:action="@{/admin/orders/update-notes}" method="post">
-                            <input type="hidden" name="orderId" th:value="${order.id}">
+                            <input type="hidden" name="rentalId" th:value="${order.id}">
                             <textarea class="form-control mb-2" name="adminNotes" rows="4"
                                       th:text="${order.adminNotes}"></textarea>
                             <button class="btn btn-primary btn-sm">Lưu</button>
@@ -119,11 +132,11 @@
     <div class="row g-4 mt-4">
         <!-- Hợp đồng -->
         <div class="col-lg-6">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm mb-4">
                 <div class="card-header bg-dark text-white">Hợp đồng</div>
                 <div class="card-body">
                     <form th:action="@{/admin/orders/upload-contract}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="orderId" th:value="${order.id}">
+                        <input type="hidden" name="rentalId" th:value="${order.id}">
                         <div class="mb-3">
                             <label class="form-label">Tải ảnh hợp đồng</label>
                             <input type="file" name="contractImages" multiple class="form-control" accept="image/*">
@@ -149,34 +162,47 @@
 
         <!-- Ảnh tình trạng xe -->
         <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">Ảnh tình trạng xe</div>
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">Ảnh tình trạng xe</div>
                 <div class="card-body">
-                    <form th:action="@{/admin/orders/upload-car-images}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="orderId" th:value="${order.id}">
-                        <div class="mb-3">
-                            <label class="form-label">Ảnh lúc giao xe</label>
+
+                    <!-- Upload ảnh giao xe -->
+                    <form th:action="@{/admin/orders/upload-handover}" method="post" enctype="multipart/form-data" class="mb-4">
+                        <input type="hidden" name="rentalId" th:value="${order.id}">
+                        <label class="form-label fw-bold">Tải ảnh lúc giao xe</label>
+                        <div class="input-group mb-2">
                             <input type="file" name="handoverImages" multiple class="form-control" accept="image/*">
+                            <button class="btn btn-primary">Upload</button>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Ảnh lúc nhận xe</label>
-                            <input type="file" name="returnImages" multiple class="form-control" accept="image/*">
-                        </div>
-                        <button class="btn btn-secondary">Cập nhật ảnh</button>
                     </form>
 
-                    <!-- Hiển thị ảnh đã có -->
+                    <!-- Upload ảnh nhận xe -->
+                    <form th:action="@{/admin/orders/upload-return}" method="post" enctype="multipart/form-data" class="mb-4">
+                        <input type="hidden" name="rentalId" th:value="${order.id}">
+                        <label class="form-label fw-bold">Tải ảnh lúc nhận xe</label>
+                        <div class="input-group mb-2">
+                            <input type="file" name="returnImages" multiple class="form-control" accept="image/*">
+                            <button class="btn btn-primary">Upload</button>
+                        </div>
+                    </form>
+
+                    <!-- Hiển thị ảnh giao xe -->
                     <div class="mt-3" th:if="${!#lists.isEmpty(handoverImages)}">
                         <p class="fw-bold">Ảnh giao xe:</p>
                         <div class="d-flex flex-wrap gap-2">
-                            <img th:each="img : ${handoverImages}" th:src="@{${img.imageUrl}}" class="img-thumbnail" style="max-width:150px;">
+                            <a th:each="img : ${handoverImages}" th:href="@{${img.imageUrl}}" target="_blank">
+                                <img th:src="@{${img.imageUrl}}" class="img-thumbnail" style="max-width:150px;">
+                            </a>
                         </div>
                     </div>
 
+                    <!-- Hiển thị ảnh nhận xe -->
                     <div class="mt-3" th:if="${!#lists.isEmpty(returnImages)}">
                         <p class="fw-bold">Ảnh nhận xe:</p>
                         <div class="d-flex flex-wrap gap-2">
-                            <img th:each="img : ${returnImages}" th:src="@{${img.imageUrl}}" class="img-thumbnail" style="max-width:150px;">
+                            <a th:each="img : ${returnImages}" th:href="@{${img.imageUrl}}" target="_blank">
+                                <img th:src="@{${img.imageUrl}}" class="img-thumbnail" style="max-width:150px;">
+                            </a>
                         </div>
                     </div>
 
@@ -188,12 +214,9 @@
 
 </div>
 <br>
-<form th:action="@{/update-status}" method="post">
+<form th:action="@{/admin/orders/send-confirm-email}" method="post">
     <input type="hidden" name="orderId" th:value="${order.id}" />
-    <input type="hidden" name="status" value="DELIVERED" />
-    <button type="submit" class="btn btn-primary w-100">
-        Xác nhận
-    </button>
+    <button type="submit" class="btn btn-primary w-100">Gửi mail xác nhận</button>
 </form>
 
 

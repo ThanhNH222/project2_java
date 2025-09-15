@@ -3,24 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Thanh toán - [[${car.name}]]</title>
-
-    <!-- Google Fonts & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Montserrat:wght@100;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
-    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
-
-    <!-- Customized Bootstrap -->
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-
     <style>
         .thumbnail-img {width:100px;height:70px;object-fit:cover;cursor:pointer;transition:transform .2s ease;}
         .thumbnail-img:hover {transform: scale(1.1);border: 2px solid #007bff;}
@@ -33,7 +17,6 @@
 
 <div class="container py-5">
     <div class="row g-5">
-
         <!-- Cột 1: Ảnh xe -->
         <div class="col-lg-4">
             <div class="border rounded">
@@ -52,19 +35,10 @@
         <!-- Cột 2: Thông tin & thanh toán -->
         <div class="col-lg-8">
             <div class="payment-summary">
-
                 <h4>Thông tin khách hàng</h4>
-                <div class="card-body">
-                    <p><strong>Họ và tên:</strong> <span th:text="${customerName}"></span></p>
-                    <input type="hidden" name="customerName" th:value="${customerName}" />
-
-                    <p><strong>Số điện thoại:</strong> <span th:text="${customerPhone}"></span></p>
-                    <input type="hidden" name="customerPhone" th:value="${customerPhone}" />
-
-                    <p><strong>Email:</strong> <span th:text="${customerEmail}"></span></p>
-                    <input type="hidden" name="customerEmail" th:value="${customerEmail}" />
-                </div>
-
+                <p><strong>Họ và tên:</strong> <span th:text="${customerName}"></span></p>
+                <p><strong>Số điện thoại:</strong> <span th:text="${customerPhone}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${customerEmail}"></span></p>
 
                 <h4>Thông tin xe</h4>
                 <ul class="list-unstyled mb-3">
@@ -74,97 +48,37 @@
                     <li><strong>Loại xe:</strong> <span th:text="${car.carType.name}"></span></li>
                     <li><strong>Hãng xe:</strong> <span th:text="${car.brand.name}"></span></li>
                     <li><strong>Tài xế:</strong> <span th:text="${car.hasDriver ? 'Có tài xế' : 'Tự lái'}"></span></li>
-                    <li><strong>Tiền cọc:</strong>
-                        <span th:text="${#numbers.formatDecimal(car.depositAmount,0,'COMMA',0,'POINT')} + ' VND'"></span>
-                    </li>
+                    <li><strong>Tiền cọc:</strong> <span th:text="${#numbers.formatDecimal(car.depositAmount,0,'COMMA',0,'POINT')} + ' VND'"></span></li>
                 </ul>
 
                 <h4>Thông tin thuê xe</h4>
                 <p><strong>Hình thức thuê:</strong> <span th:text="${rentalType}"></span></p>
                 <p><strong>Thời gian:</strong> <span th:text="${pickupDateTime} + ' → ' + ${dropoffDateTime}"></span></p>
-                <p><strong>Nơi nhận:</strong>
-                    <span th:text="${pickupLocation}"></span>                </p>
-                <p><strong>Nơi trả:</strong>
-                    <span th:text="${dropoffLocation}"></span>                </p>
-
-                <p><strong>Giá thuê:</strong>
-                    <span th:text="${#numbers.formatDecimal(rentalPrice,0,'COMMA',0,'POINT')} + ' VND'"></span>
-                </p>
-                <p><strong>Phí ship:</strong>
-                    <span th:text="${shippingFee} + ' VND'"></span>
-                </p>
+                <p><strong>Nơi nhận:</strong> <span th:text="${pickupLocation}"></span></p>
+                <p><strong>Nơi trả:</strong> <span th:text="${dropoffLocation}"></span></p>
+                <p><strong>Giá thuê:</strong> <span th:text="${#numbers.formatDecimal(rentalPrice,0,'COMMA',0,'POINT')} + ' VND'"></span></p>
+                <p><strong>Phí ship:</strong> <span th:text="${shippingFee} + ' VND'"></span></p>
                 <hr>
-                <h5>Tổng tiền cọc :
-                    <span class="text-danger fw-bold" th:text="${#numbers.formatDecimal(totalPayment,0,'COMMA',0,'POINT')} + ' VND'"></span>
-                </h5>
+                <h5>Tổng tiền cọc : <span class="text-danger fw-bold" th:text="${#numbers.formatDecimal(totalPayment,0,'COMMA',0,'POINT')} + ' VND'"></span></h5>
             </div>
 
             <div class="booking-form">
-<!--                <h4>Thông tin khách hàng</h4>-->
                 <form th:action="@{/pay}" method="get">
-                    <input type="hidden" name="amount" th:value="${totalAmount}">
-                    <input type="hidden" name="currency" value="USD">
+                    <input type="hidden" name="amount" th:value="${totalPayment}" />
+                    <input type="hidden" name="currency" value="USD" />
                     <input type="hidden" name="carId" th:value="${car.id}" />
                     <input type="hidden" name="rentalType" th:value="${rentalType}" />
                     <input type="hidden" name="pickupDateTime" th:value="${pickupDateTime}" />
                     <input type="hidden" name="dropoffDateTime" th:value="${dropoffDateTime}" />
-                    <input type="hidden" name="shippingFee" th:value="${shippingFee}" />
-                    <input type="hidden" name="depositAmount" th:value="${car.depositAmount}" />
+                    <input type="hidden" name="customerName" th:value="${customerName}" />
+                    <input type="hidden" name="customerPhone" th:value="${customerPhone}" />
+                    <input type="hidden" name="customerEmail" th:value="${customerEmail}" />
 
-                    <input type="hidden" name="customerName" th:value="${customerName}">
-                    <input type="hidden" name="customerPhone" th:value="${customerPhone}">
-                    <input type="hidden" name="customerEmail" th:value="${customerEmail}">
-
-                    <input type="hidden" name="pickupLocation" th:value="${pickupLocation}">
-                    <input type="hidden" name="dropoffLocation" th:value="${dropoffLocation}">
-
-
-
-                    <!--                    <div class="mb-3">-->
-<!--                        <label for="customerName" class="form-label">Họ và tên</label>-->
-<!--                        <input type="text" class="form-control" id="customerName" name="customerName" required>-->
-<!--                    </div>-->
-<!--                    <div class="mb-3">-->
-<!--                        <label for="customerPhone" class="form-label">Số điện thoại</label>-->
-<!--                        <input type="text" class="form-control" id="customerPhone" name="customerPhone" required>-->
-<!--                    </div>-->
-<!--                    <div class="mb-3">-->
-<!--                        <label for="customerEmail" class="form-label">Email</label>-->
-<!--                        <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>-->
-<!--                    </div>-->
-<!--                    <div class="mb-3">-->
-<!--                        <label for="paymentMethod" class="form-label">Thanh toán</label>-->
-<!--                        <select class="form-select" id="paymentMethod" name="paymentMethod" required>-->
-<!--                            <option value="">&#45;&#45; Chọn hình thức &#45;&#45;</option>-->
-<!--&lt;!&ndash;                            <option value="cash">Tiền mặt</option>&ndash;&gt;-->
-<!--                            <option value="bank">Chuyển khoản</option>-->
-<!--&lt;!&ndash;                            <option value="momo">Momo</option>&ndash;&gt;-->
-<!--                        </select>-->
-
-                    <input type="hidden" name="paymentMethod" value="bank">
-
-
-                    <h4>Thanh toán</h4>
-
-                        <div class="mb-2">
-                            <strong>Tên ngân hàng:</strong> ABC
-                        </div>
-                        <div class="mb-2">
-                            <strong>Số tài khoản:</strong> 123456
-                        </div>
-                        <div class="mb-2">
-                            <strong>Chủ tài khoản:</strong> RentCar
-                        </div>
-
-                    <!-- Nút submit: khi nhấn sẽ gọi PaymentController và gửi email -->
-                    <button type="submit" class="btn btn-primary w-100">
-                        Xác nhận thanh toán
-                    </button>
+                    <button type="submit" class="btn btn-primary w-100">Thanh toán PayPal</button>
                 </form>
 
             </div>
         </div>
-
     </div>
 </div>
 
@@ -172,7 +86,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
     function changeMainImage(imgElement) {
         document.getElementById('mainImage').src = imgElement.src;

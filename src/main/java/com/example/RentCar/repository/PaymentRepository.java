@@ -1,6 +1,7 @@
 package com.example.RentCar.repository;
 
 import com.example.RentCar.entity.Payment;
+import com.example.RentCar.entity.Rental;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     // Tìm tất cả thanh toán theo hình thức
     List<Payment> findByRental_PaymentMethod(String paymentMethod);
+
+    Payment findByRentalId(Long rentalId);
+
+    Payment findByRental(Rental rental);
 }
